@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard - Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h2>Welcome to your Dashboard, {{ user.username }}!</h2>
@@ -17,11 +18,136 @@
 
     <hr>
 
+    <h3>Filter Expenses by Date</h3>
+    <form method="GET" action="{% url 'dashboard' %}">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date|default_if_none:'' }}">
+
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date|default_if_none:'' }}">
+
+        <button type="submit">Apply Filter</button>
+        <a href="{% url 'dashboard' %}">Clear Filter</a>
+    </form>
+
+    <hr>
+
+    <h3>Spending Summary</h3>
+    Total Spent (in current filter): <strong>₹{{ total_spent|floatformat:2 }}</strong></p>>
+
+    <h4>Spending by Category</h4>
+    <div style="width: 70%; margin: auto;">
+        <canvas id="categoryChart"></canvas>
+    </div>
+
+    <h4>Monthly Spending Trend</h4>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <script>
+        // Parse the JSON data passed from Django view
+        const categoryLabels = JSON.parse('{{ category_labels|escapejs }}');
+        const categoryData = JSON.parse('{{ category_data|escapejs }}');
+        const monthlyLabels = JSON.parse('{{ monthly_labels|escapejs }}');
+        const monthlyData = JSON.parse('{{ monthly_data|escapejs }}');
+
+        // Category Pie Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'pie',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    label: 'Amount Spent by Category',
+                    data: categoryData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(199, 199, 199, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(199, 199, 199, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Spending by Category'
+                    }
+                }
+            },
+        });
+
+        // Monthly Spending Bar Chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: 'Amount Spent per Month',
+                    data: monthlyData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly Spending Trend'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount ($)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month (YYYY-MM)'
+                        }
+                    }
+                }
+            },
+        });
+    </script>
+    <hr>
+
     <h3>Your Expenses</h3>
     <ul>
         {% for expense in expenses %}
             <li>
-                <strong>{{ expense.title }}</strong> - ${{ expense.amount }} ({{ expense.category }}) on {{ expense.date }}
+                <strong>{{ expense.title }}</strong> - ₹{{ expense.amount }} ({{ expense.category }}) on {{ expense.date }}
+                [ <a href="{% url 'edit_expense' expense.id %}">Edit</a> ]
+                [ <a href="{% url 'delete_expense' expense.id %}">Delete</a> ]
             </li>
         {% empty %}
             <li>No expenses recorded yet.</li>
