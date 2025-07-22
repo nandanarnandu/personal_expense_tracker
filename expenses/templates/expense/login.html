@@ -1,15 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Login - Expense Tracker</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6f0fa;
+            margin: 0;
+            padding: 0;
+            color: #1a2e4f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: #ffffff;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(26, 46, 79, 0.15);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #c5d3eb;
+            box-sizing: border-box;
+        }
+        h2 {
+            margin-bottom: 28px;
+            font-weight: 700;
+            color: #0a1d40;
+            font-size: 2.2rem;
+            letter-spacing: 0.03em;
+        }
+        form {
+            text-align: left;
+        }
+        form p {
+            margin: 18px 0;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #2c3e70;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #34495e;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 1rem;
+            border: 1.8px solid #c5d3eb;
+            border-radius: 8px;
+            margin-top: 4px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus {
+            border-color: #0a3d91;
+            outline: none;
+            box-shadow: 0 0 8px rgba(10, 61, 145, 0.5);
+        }
+        button[type="submit"] {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #0a3d91;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 14px 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(10, 61, 145, 0.35);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            user-select: none;
+        }
+        button[type="submit"]:hover,
+        button[type="submit"]:focus {
+            background-color: #072e72;
+            box-shadow: 0 7px 22px rgba(6, 30, 79, 0.55);
+            outline: none;
+        }
+
+        /* Django default error styles (if any) */
+        .errorlist {
+            color: #e74c3c;
+            margin: 4px 0 12px;
+            font-size: 0.9rem;
+            list-style-type: none;
+            padding-left: 0;
+        }
+    </style>
 </head>
 <body>
-    <h2>Login to Your Account</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+    <main class="login-container" role="main" aria-label="Login to Expense Tracker">
+        <h2>Login to Your Account</h2>
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+                <p>
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <span class="errorlist">{{ error }}</span>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                <div class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <button type="submit" aria-label="Login to your account">Login</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px;"><a href="{% url 'password_reset' %}" style="font-size: 0.95rem;">Forgot your password?</a></p>
+    </main>
 </body>
 </html>
