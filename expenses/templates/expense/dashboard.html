@@ -9,489 +9,627 @@
         * {
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #c7d9f9, #e6f0fa);
+            background-color: #e6f2ff;
             margin: 0;
-            padding: 40px 20px;
-            color: #1a2e4f;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
+            padding: 0;
+            color: #333;
         }
-        .dashboard-container {
-            background: #ffffff;
-            padding: 40px 50px 60px;
-            border-radius: 16px;
-            box-shadow: 0 12px 30px rgba(10, 61, 145, 0.2);
-            max-width: 960px;
-            width: 100%;
-            color: #1a2e4f;
-            display: flex;
-            flex-direction: column;
-            gap: 36px;
-        }
-        h2 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-weight: 800;
-            color: #0a1d40;
-            font-size: 2.75rem;
-            letter-spacing: 0.05em;
+
+        header {
+            background-color: #0077cc;
+            color: white;
+            padding: 1rem 2rem;
             text-align: center;
-            text-shadow: 0 1px 3px rgba(10, 61, 145, 0.3);
         }
-        /* Logout Button Container */
-        .logout-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-        .logout-container form {
-            display: inline;
-        }
-        .logout-container button {
-            background-color: #0a3d91;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
-            padding: 10px 28px;
-            border: none;
-            border-radius: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 18px rgba(10, 61, 145, 0.45);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            user-select: none;
-            letter-spacing: 0.05em;
-        }
-        .logout-container button:hover,
-        .logout-container button:focus {
-            background-color: #072e72;
-            box-shadow: 0 6px 25px rgba(6, 30, 79, 0.7);
-            outline: none;
-        }
-        /* Section Headings */
-        h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #102a57;
-            font-weight: 700;
-            font-size: 1.8rem;
-            border-bottom: 3px solid #2980b9;
-            padding-bottom: 10px;
-            letter-spacing: 0.03em;
-        }
-        form {
-            margin-top: 12px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: flex-end;
-            gap: 20px;
-        }
-        form label {
-            font-weight: 600;
-            color: #34495e;
-            min-width: 92px;
-            font-size: 1.1rem;
-            user-select: none;
-        }
-        form input[type="date"],
-        form input[type="text"],
-        form input[type="number"],
-        form select,
-        form textarea {
-            padding: 10px 14px;
-            font-size: 1.05rem;
-            border: 2px solid #c5d3eb;
-            border-radius: 10px;
-            width: 230px;
-            max-width: 100%;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-            font-weight: 500;
-            color: #1a2e4f;
-        }
-        form input[type="date"]:focus,
-        form input[type="text"]:focus,
-        form input[type="number"]:focus,
-        form select:focus,
-        form textarea:focus {
-            border-color: #2980b9;
-            outline: none;
-            box-shadow: 0 0 12px rgba(41, 128, 185, 0.75);
-        }
-        form button {
-            background-color: #0a3d91;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 14px 36px;
-            border: none;
-            border-radius: 28px;
-            cursor: pointer;
-            box-shadow: 0 6px 21px rgba(10, 61, 145, 0.45);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            user-select: none;
-            letter-spacing: 0.05em;
-            flex-shrink: 0;
-        }
-        form button:hover,
-        form button:focus {
-            background-color: #072e72;
-            box-shadow: 0 8px 30px rgba(6, 30, 79, 0.75);
-            outline: none;
-        }
-        form a.button-link {
-            display: inline-block;
-            margin-left: 12px;
-            padding: 12px 28px;
-            background-color: transparent;
-            border: 2px solid #2980b9;
-            color: #2980b9;
-            border-radius: 28px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            text-decoration: none;
-            user-select: none;
-            flex-shrink: 0;
-            line-height: 1;
-        }
-        form a.button-link:hover,
-        form a.button-link:focus {
-            background-color: #2980b9;
-            color: #fff;
-            outline: none;
-        }
-        hr {
-            margin: 48px 0;
-            border: none;
-            border-top: 2px solid #c5d3eb;
-            opacity: 0.7;
-        }
-        /* Chart containers */
-        .chart-wrapper {
-            margin: 0 auto 40px auto;
-            max-width: 750px;
-            background: #f7fbff;
-            padding: 26px 26px 36px;
-            border-radius: 12px;
-            box-shadow: 0 8px 18px rgba(10, 61, 145, 0.12);
-            border: 1px solid #cde0ff;
-        }
-        .chart-wrapper h4 {
-            margin: 0 0 22px;
-            color: #07407f;
-            font-weight: 700;
-            font-size: 1.5rem;
-            text-align: center;
-            user-select: none;
-        }
-        /* Expenses list */
-        ul.expenses-list {
-            list-style: none;
-            padding-left: 0;
+
+        h1 {
             margin: 0;
-            max-width: 750px;
-            margin-left: auto;
-            margin-right: auto;
         }
-        ul.expenses-list li {
-            background: #f5f9ff;
-            border: 1.8px solid #bbd2ff;
-            border-radius: 12px;
-            padding: 18px 28px;
-            margin-bottom: 16px;
-            font-size: 1.15rem;
-            color: #34495e;
+
+        main {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            transition: box-shadow 0.3s ease;
-            cursor: default;
+            margin-bottom: 1rem;
+            padding: 0 8px;
         }
-        ul.expenses-list li:hover,
-        ul.expenses-list li:focus-within {
-            box-shadow: 0 6px 18px rgba(10, 61, 145, 0.2);
-        }
-        ul.expenses-list li strong {
-            color: #0a1d40;
-        }
-        ul.expenses-list li .expense-details {
-            flex: 1 1 60%;
-            min-width: 240px;
-            font-weight: 600;
-            user-select: text;
-        }
-        ul.expenses-list li .expense-actions {
-            flex: 1 1 35%;
-            min-width: 160px;
-            text-align: right;
-        }
-        ul.expenses-list li .expense-actions a {
-            margin-left: 20px;
-            color: #0a3d91;
+
+        .top-bar .welcome {
+            font-size: 1.75rem; /* Equivalent to h2 */
             font-weight: 700;
-            border-bottom: 2px solid transparent;
-            padding-bottom: 2px;
-            transition: color 0.3s ease, border-color 0.3s ease;
-            user-select: none;
+            color: #0a3d91;
         }
-        ul.expenses-list li .expense-actions a:hover,
-        ul.expenses-list li .expense-actions a:focus {
-            color: #072e72;
-            border-color: #072e72;
-            outline: none;
+
+        .top-bar button {
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        /* Responsive */
+
+        .top-bar button:hover {
+            background-color: #005fa3;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            color: #005999;
+            border-bottom: 2px solid #0077cc;
+            padding-bottom: 0.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #ffffff;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-left: 5px solid #0077cc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #0077cc;
+            color: white;
+        }
+
+        .highlight {
+            color: #0077cc;
+            font-weight: bold;
+        }
+
+        /* Weekly Calendar Styles */
+        .week-calendar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            background: #f0f6ff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(10, 61, 145, 0.08);
+            margin-bottom: 32px;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .week-calendar .day {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .week-calendar .day-name {
+            display: block;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 1rem;
+        }
+
+        .week-calendar .day-date {
+            display: block;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0a3d91;
+        }
+
+        .week-calendar .today {
+            background-color: #0a3d91;
+            color: #ffffff;
+        }
+
+        .week-calendar .today .day-name,
+        .week-calendar .today .day-date {
+            color: #ffffff;
+        }
+
+        /* Responsive layout for smaller screens */
         @media (max-width: 860px) {
-            .dashboard-container {
-                padding: 30px 32px 48px;
-                max-width: 100vw;
-                margin: 0 12px;
+            main {
+                padding: 1rem;
             }
-            .chart-wrapper {
-                max-width: 100%;
-                padding: 20px 18px 30px;
+
+            th, td {
+                padding: 0.5rem;
             }
-            ul.expenses-list {
-                max-width: 100%;
-                margin: 0 10px;
+
+            header {
+                padding: 1rem;
             }
-            form {
+
+            .week-calendar {
                 flex-direction: column;
-                align-items: stretch;
-                gap: 16px;
             }
-            form label {
-                min-width: auto;
-            }
-            form input[type="date"],
-            form input[type="text"],
-            form input[type="number"],
-            form select,
-            form textarea {
+
+            .week-calendar .day {
                 width: 100%;
-                margin-right: 0;
+                margin-bottom: 8px;
             }
-            form button,
-            form a.button-link {
-                width: 100%;
-                margin-left: 0;
-                padding: 16px 0;
-                font-size: 1.15rem;
-            }
-            ul.expenses-list li {
+
+            .top-bar {
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 16px 24px;
-            }
-            ul.expenses-list li .expense-actions {
-                text-align: left;
-                margin-top: 14px;
-                min-width: 100%;
-            }
-            ul.expenses-list li .expense-actions a {
-                margin-left: 0;
-                margin-right: 18px;
+                gap: 10px;
             }
         }
+
+        .summary-card {
+    background-color: #ffffff;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    min-width: 200px;
+    flex: 1;
+}
+
+.summary-card h4 {
+    color: #005999;
+    margin-bottom: 0.5rem;
+}
+
+.income-amount {
+    color: #2ecc71;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.expense-amount {
+    color: #e74c3c;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.balance-amount {
+    color: #34495e;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.form-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.form-card {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    flex: 1 1 300px;
+}
+
+.form-card h4 {
+    margin-top: 0;
+    color: #0077cc;
+}
+
+form button {
+    margin-top: 1rem;
+    background-color: #0077cc;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #005fa3;
+}
+
+.goals-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.goals-list li {
+    background-color: #f9f9f9;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-left: 5px solid #0077cc;
+    border-radius: 6px;
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #0a3d91;
+    margin-bottom: 0.5rem;
+}
+
+.goal-progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    height: 20px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+}
+
+.goal-progress {
+    background-color: #0077cc;
+    height: 100%;
+    color: white;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.goal-actions {
+    margin-top: 0.5rem;
+}
+
+.goal-actions a {
+    margin-right: 10px;
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.goal-actions a:hover {
+    text-decoration: underline;
+}
+
+.completed {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.chart-wrapper {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.expense-actions {
+    margin-top: 0.5rem;
+}
+
+.expense-actions a {
+    margin-right: 12px;
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.expense-actions a:hover {
+    text-decoration: underline;
+}
+
+.button-link {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    color: #0077cc;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
     </style>
 </head>
 <body>
-    <main class="dashboard-container" role="main" aria-label="Dashboard - Expense Tracker">
-        <h2>Welcome to your Dashboard, {{ user.username }}!</h2>
-        <div class="logout-container">
-            <form action="{% url 'logout' %}" method="post" aria-label="Logout form">
+    <header>
+    <h1>Dashboard</h1>
+</header>
+<main class="dashboard-container" role="main" aria-label="Dashboard - Expense Tracker">
+    <div class="top-bar">
+        <div class="welcome">Welcome back, {{ user.username }}!</div>
+        <form class="logout-form" action="{% url 'logout' %}" method="post" aria-label="Logout form">
+            {% csrf_token %}
+            <button type="submit" aria-describedby="logoutDesc">Logout</button>
+        </form>
+    </div>
+
+    <div class="week-calendar" id="weekCalendar"></div>
+
+    <section aria-labelledby="today-transactions-title">
+        <h3 id="today-transactions-title">Today's Transactions</h3>
+        <ul class="expenses-list today-transactions-list">
+            {% for transaction in today_incomes %}
+                <li tabindex="0" class="income-item">
+                    <div class="expense-details" aria-label="Income details">
+                        <strong>{{ transaction.title }}</strong> – ₹{{ transaction.amount }} ({{ transaction.category }})
+                    </div>
+                    <div class="transaction-type" aria-label="Transaction type">
+                        Income
+                    </div>
+                </li>
+            {% endfor %}
+            {% for transaction in today_expenses %}
+                <li tabindex="0" class="expense-item">
+                    <div class="expense-details" aria-label="Expense details">
+                        <strong>{{ transaction.title }}</strong> – ₹{{ transaction.amount }} ({{ transaction.category }})
+                    </div>
+                    <div class="transaction-type" aria-label="Transaction type">
+                        Expense
+                    </div>
+                </li>
+            {% endfor %}
+            {% if not today_incomes and not today_expenses %}
+                <li>No transactions found for today.</li>
+            {% endif %}
+        </ul>
+    </section>
+
+
+        <section aria-labelledby="monthly-summary-title">
+    <h3 id="monthly-summary-title">Monthly Summary</h3>
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; text-align: center;">
+        <div class="summary-card">
+            <h4>Income (Monthly)</h4>
+            <p class="income-amount">₹{{ total_income|floatformat:2 }}</p>
+        </div>
+        <div class="summary-card">
+            <h4>Expense (Monthly)</h4>
+            <p class="expense-amount">₹{{ total_spent|floatformat:2 }}</p>
+        </div>
+        <div class="summary-card">
+            <h4>Balance (Monthly)</h4>
+            <p class="balance-amount">₹{{ balance|floatformat:2 }}</p>
+        </div>
+    </div>
+</section>
+
+<section aria-labelledby="add-transactions-title">
+    <h3 id="add-transactions-title">Add New Transactions</h3>
+    <div class="form-section">
+        <div class="form-card">
+            <h4>Add Expense</h4>
+            <form method="POST" novalidate>
                 {% csrf_token %}
-                <button type="submit" aria-describedby="logoutDesc">Logout</button>
+                {{ expense_form.as_p }}
+                <button type="submit" name="add_expense" aria-label="Add new expense">Add Expense</button>
             </form>
         </div>
 
-        <section aria-labelledby="add-expense-title">
-            <h3 id="add-expense-title">Add New Expense</h3>
+        <div class="form-card">
+            <h4>Add Income</h4>
             <form method="POST" novalidate>
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" aria-label="Add new expense">Add Expense</button>
+                {{ income_form.as_p }}
+                <button type="submit" name="add_income" aria-label="Add new income">Add Income</button>
             </form>
-        </section>
+        </div>
+    </div>
+</section>
 
-        <hr />
+<section aria-labelledby="goals-title">
+    <h3 id="goals-title">Your Goals</h3>
+    <div class="form-card"> {# Reusing form-card for add goal form #}
+        <h4>Add New Goal</h4>
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            {% for field in goal_form %}
+                <p>
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <span class="errorlist">{{ error }}</span>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+            {% if goal_form.non_field_errors %}
+                <div class="errorlist">
+                    {% for error in goal_form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <button type="submit" name="add_goal" aria-label="Add new goal">Add Goal</button>
+        </form>
+    </div>
 
-        <section aria-labelledby="filter-expenses-title">
-            <h3 id="filter-expenses-title">Filter Expenses by Date</h3>
-            <form method="GET" action="{% url 'dashboard' %}" novalidate>
-                <label for="start_date">Start Date:</label>
-                <input type="date" id="start_date" name="start_date" value="{{ start_date|default_if_none:'' }}" />
+    <ul class="goals-list">
+        {% for goal in goals %}
+            <li tabindex="0" class="{% if goal.completed %}completed{% endif %}">
+                <div class="goal-header">
+                    <span class="goal-name">{{ goal.name }}</span>
+                    <span class="goal-amounts">
+                        ₹{{ goal.current_amount|floatformat:2 }} / ₹{{ goal.target_amount|floatformat:2 }}
+                        {% if goal.due_date %}(by {{ goal.due_date }}){% endif %}
+                    </span>
+                </div>
+                <div class="goal-progress-bar">
+                    <div class="goal-progress" style="width: {{ goal.progress_percentage|floatformat:0 }}%;">
+                        {{ goal.progress_percentage|floatformat:0 }}%
+                    </div>
+                </div>
+                <div class="goal-actions">
+                    {% if goal.id %}
+                        <a href="{% url 'edit_goal' goal.id %}">Edit Goal</a>
+                        <a href="{% url 'delete_goal' goal.id %}">Delete Goal</a>
+                    {% endif %}
+                </div>
+            </li>
+        {% empty %}
+            <li style="text-align: center; color: #667788;">No goals set yet. Start saving!</li>
+        {% endfor %}
+    </ul>
+</section>
 
-                <label for="end_date">End Date:</label>
-                <input type="date" id="end_date" name="end_date" value="{{ end_date|default_if_none:'' }}" />
 
-                <button type="submit" aria-label="Apply date filter">Apply Filter</button>
-                <a href="{% url 'dashboard' %}" class="button-link" aria-label="Clear date filter">Clear Filter</a>
-            </form>
-        </section>
+<section aria-labelledby="filter-expenses-title">
+    <h3 id="filter-expenses-title">Filter Expenses by Date</h3>
+    <form method="GET" action="{% url 'dashboard' %}" novalidate>
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date|default_if_none:'' }}" />
 
-        <hr />
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date|default_if_none:'' }}" />
 
-        <section aria-labelledby="spending-summary-title">
-            <h3 id="spending-summary-title">Spending Summary</h3>
-            <p>Total Spent (in current filter): <strong>₹{{ total_spent|floatformat:2 }}</strong></p>
-        </section>
+        <button type="submit" aria-label="Apply date filter">Apply Filter</button>
+        <a href="{% url 'dashboard' %}" class="button-link" aria-label="Clear date filter">Clear Filter</a>
+    </form>
+</section>
 
-        <section aria-labelledby="category-chart-title" class="chart-wrapper">
-            <h4 id="category-chart-title">Spending by Category</h4>
-            <canvas id="categoryChart" role="img" aria-label="Pie chart showing spending by category"></canvas>
-        </section>
+<section aria-labelledby="spending-summary-title">
+    <h3 id="spending-summary-title">Spending Summary (Filtered)</h3>
+    <p>Total Spent (in current filter): <strong>₹{{ total_spent|floatformat:2 }}</strong></p>
+</section>
 
-        <section aria-labelledby="monthly-chart-title" class="chart-wrapper">
-            <h4 id="monthly-chart-title">Monthly Spending Trend</h4>
-            <canvas id="monthlyChart" role="img" aria-label="Bar chart showing monthly spending trend"></canvas>
-        </section>
+<section aria-labelledby="category-chart-title" class="chart-wrapper">
+    <h4 id="category-chart-title">Spending by Category</h4>
+    <canvas id="categoryChart" width="400" height="200"></canvas>
+</section>
 
-        <hr />
+<section aria-labelledby="monthly-chart-title" class="chart-wrapper">
+    <h4 id="monthly-chart-title">Monthly Spending Trend</h4>
+    <canvas id="monthlyChart" width="400" height="200"></canvas>
+</section>
 
-        <section aria-labelledby="expenses-list-title">
-            <h3 id="expenses-list-title">Your Expenses</h3>
-            <ul class="expenses-list">
-                {% for expense in expenses %}
-                    <li tabindex="0">
-                        <div class="expense-details" aria-label="Expense details">
-                            <strong>{{ expense.title }}</strong> – ₹{{ expense.amount }} ({{ expense.category }}) on {{ expense.date }}
-                        </div>
-                        <div class="expense-actions" aria-label="Expense actions">
-                            <a href="{% url 'edit_expense' expense.id %}">Edit</a>
-                            <a href="{% url 'delete_expense' expense.id %}">Delete</a>
-                        </div>
-                    </li>
-                {% empty %}
-                    <li>No expenses recorded yet.</li>
-                {% endfor %}
-            </ul>
-        </section>
+<section aria-labelledby="expenses-list-title">
+    <h3 id="expenses-list-title">Your All Expenses</h3>
+    <ul class="expenses-list">
+        {% for expense in expenses %}
+            <li tabindex="0">
+                <div class="expense-details" aria-label="Expense details">
+                    <strong>{{ expense.title }}</strong> – ₹{{ expense.amount }} ({{ expense.category }}) on {{ expense.date }}
+                </div>
+                <div class="expense-actions" aria-label="Expense actions">
+                    <a href="{% url 'edit_expense' expense.id %}">Edit Expense</a>
+                    <a href="{% url 'delete_expense' expense.id %}">Delete Expense</a>
+                </div>
+            </li>
+        {% empty %}
+            <li>No expenses recorded yet.</li>
+        {% endfor %}
+    </ul>
+</section>
 
-    </main>
+</main>
 
-    <script>
-        // Parse the JSON data passed from Django view safely
-        const categoryLabels = JSON.parse('{{ category_labels|escapejs }}');
-        const categoryData = JSON.parse('{{ category_data|escapejs }}');
-        const monthlyLabels = JSON.parse('{{ monthly_labels|escapejs }}');
-        const monthlyData = JSON.parse('{{ monthly_data|escapejs }}');
+<script>
+    
+    // Live calendar generation
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const calendarContainer = document.getElementById('weekCalendar');
+    const today = new Date();
+    const todayIndex = today.getDay();
 
-        // Category Pie Chart
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        new Chart(categoryCtx, {
-            type: 'pie',
-            data: {
-                labels: categoryLabels,
-                datasets: [{
-                    label: 'Amount Spent by Category',
-                    data: categoryData,
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.75)',
-                        'rgba(75, 192, 192, 0.75)',
-                        'rgba(99, 132, 255, 0.75)',
-                        'rgba(0, 123, 255, 0.75)',
-                        'rgba(0, 86, 179, 0.75)',
-                        'rgba(102, 153, 255, 0.75)',
-                        'rgba(153, 204, 255, 0.75)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(99, 132, 255, 1)',
-                        'rgba(0, 123, 255, 1)',
-                        'rgba(0, 86, 179, 1)',
-                        'rgba(102, 153, 255, 1)',
-                        'rgba(153, 204, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            color: '#1a2e4f',
-                            font: {size: 14, weight: '600'}
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Spending by Category',
-                        color: '#0a1d40',
-                        font: {size: 18, weight: '700'}
-                    }
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - todayIndex); // Sunday of current week
+
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(startOfWeek);
+        date.setDate(startOfWeek.getDate() + i);
+        const dayName = weekDays[date.getDay()];
+        const dayDate = date.getDate();
+
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'day' + (i === todayIndex ? ' today' : '');
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'day-name';
+        nameSpan.textContent = dayName;
+
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'day-date';
+        dateSpan.textContent = dayDate;
+
+        dayDiv.appendChild(nameSpan);
+        dayDiv.appendChild(dateSpan);
+
+        calendarContainer.appendChild(dayDiv);
+    }
+
+    console.log('Category Data:', categoryData);
+    console.log('Monthly Data:', monthlyData);
+
+    // Dynamically build data for category chart
+    const categoryLabels = categoryData.map(item => item.name);
+    const categoryAmounts = categoryData.map(item => item.amount);
+
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'bar',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                label: 'Expenses by Category (₹)',
+                data: categoryAmounts,
+                backgroundColor: ['#0077cc', '#3399ff', '#66b3ff', '#99ccff']
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            },
-        });
+            }
+        }
+    });
 
-        // Monthly Spending Bar Chart
-        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-        new Chart(monthlyCtx, {
-            type: 'bar',
-            data: {
-                labels: monthlyLabels,
-                datasets: [{
-                    label: 'Amount Spent per Month',
-                    data: monthlyData,
-                    backgroundColor: 'rgba(10, 61, 145, 0.75)',
-                    borderColor: 'rgba(10, 61, 145, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Monthly Spending Trend',
-                        color: '#0a1d40',
-                        font: {size: 18, weight: '700'}
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Amount (₹)',
-                            color: '#1a2e4f',
-                            font: {size: 14, weight: '600'}
-                        },
-                        ticks: {
-                            color: '#34495e',
-                            font: {size: 13}
-                        },
-                        grid: {
-                            color: 'rgba(41, 61, 91, 0.1)'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Month (YYYY-MM)',
-                            color: '#1a2e4f',
-                            font: {size: 14, weight: '600'}
-                        },
-                        ticks: {
-                            color: '#34495e',
-                            font: {size: 13}
-                        },
-                        grid: {
-                            color: 'rgba(41, 61, 91, 0.1)'
-                        }
-                    }
+    // Dynamically build data for monthly chart
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+            labels: monthlyData.labels,
+            datasets: [{
+                label: 'Monthly Spending (₹)',
+                data: monthlyData.values,
+                borderColor: '#0077cc',
+                backgroundColor: 'rgba(0, 119, 204, 0.1)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            },
-        });
-    </script>
+            }
+        }
+    });
+
+    // Dummy logout function
+    function logout() {
+        alert("Logging out...");
+        // Redirect or clear auth in real use
+    }
+</script>
 </body>
 </html>
