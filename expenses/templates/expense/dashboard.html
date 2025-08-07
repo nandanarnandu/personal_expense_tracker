@@ -342,6 +342,11 @@ form button:hover {
     font-size: 1rem;
 }
 
+.chart-wrapper canvas {
+    max-height: 400px !important;
+    height: 300px !important;
+}
+
     </style>
 </head>
 <body>
@@ -389,7 +394,7 @@ form button:hover {
     </section>
 
 
-        <section aria-labelledby="monthly-summary-title">
+    <section aria-labelledby="monthly-summary-title">
     <h3 id="monthly-summary-title">Monthly Summary</h3>
     <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; text-align: center;">
         <div class="summary-card">
@@ -539,15 +544,14 @@ form button:hover {
 </main>
 
 <script>
-    
-    // Live calendar generation
+    // Live calendar generation (This part remains the same)
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const calendarContainer = document.getElementById('weekCalendar');
     const today = new Date();
     const todayIndex = today.getDay();
 
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - todayIndex); // Sunday of current week
+    startOfWeek.setDate(today.getDate() - todayIndex);
 
     for (let i = 0; i < 7; i++) {
         const date = new Date(startOfWeek);
@@ -571,22 +575,25 @@ form button:hover {
 
         calendarContainer.appendChild(dayDiv);
     }
+    
+    // --- DYNAMIC CHART DATA ---
+    // The data is now being passed from your Django view and rendered as a JSON string.
+    // We use JSON.parse() to convert the string back into a JavaScript object.
+    const categoryLabels = JSON.parse('{{ category_labels|safe }}');
+    const categoryData = JSON.parse('{{ category_data|safe }}');
 
-    console.log('Category Data:', categoryData);
-    console.log('Monthly Data:', monthlyData);
-
-    // Dynamically build data for category chart
-    const categoryLabels = categoryData.map(item => item.name);
-    const categoryAmounts = categoryData.map(item => item.amount);
-
+    const monthlyLabels = JSON.parse('{{ monthly_labels|safe }}');
+    const monthlyData = JSON.parse('{{ monthly_data|safe }}');
+    
+    // Category Chart
     const categoryCtx = document.getElementById('categoryChart').getContext('2d');
     new Chart(categoryCtx, {
         type: 'bar',
         data: {
-            labels: categoryLabels,
+            labels: categoryLabels, // Use the dynamic labels
             datasets: [{
                 label: 'Expenses by Category (₹)',
-                data: categoryAmounts,
+                data: categoryData, // Use the dynamic data
                 backgroundColor: ['#0077cc', '#3399ff', '#66b3ff', '#99ccff']
             }]
         },
@@ -600,15 +607,15 @@ form button:hover {
         }
     });
 
-    // Dynamically build data for monthly chart
+    // Monthly Chart
     const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
     new Chart(monthlyCtx, {
         type: 'line',
         data: {
-            labels: monthlyData.labels,
+            labels: monthlyLabels, // Use the dynamic labels
             datasets: [{
                 label: 'Monthly Spending (₹)',
-                data: monthlyData.values,
+                data: monthlyData, // Use the dynamic data
                 borderColor: '#0077cc',
                 backgroundColor: 'rgba(0, 119, 204, 0.1)',
                 tension: 0.3,
@@ -625,11 +632,6 @@ form button:hover {
         }
     });
 
-    // Dummy logout function
-    function logout() {
-        alert("Logging out...");
-        // Redirect or clear auth in real use
-    }
 </script>
 </body>
 </html>
