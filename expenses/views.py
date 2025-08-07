@@ -9,6 +9,8 @@ from django.db.models import Q, Sum
 from datetime import datetime, date, timedelta
 from decimal import Decimal
 import json
+import pandas as pd # NEW
+from sklearn.linear_model import LinearRegression # NEW
 
 class ExpenseForm(forms.ModelForm):
     class Meta:
@@ -48,6 +50,43 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'expense/register.html', {'form': form})
 
+# NEW: AI/ML function to predict spending
+def predict_monthly_spending(user):
+    all_expenses = Expense.objects.filter(owner=user).order_by('date')
+    if not all_expenses:
+        return None, "Not enough data to predict."
+
+    # Convert to DataFrame
+    df = pd.DataFrame(list(all_expenses.values('date', 'amount')))
+    df['date'] = pd.to_datetime(df['date'])
+    df['month'] = df['date'].dt.to_period('M')
+
+    # Group by month and sum amounts
+    monthly_spending = df.groupby('month')['amount'].sum()
+
+    # We need at least two months of data to create a trend
+    if len(monthly_spending) < 2:
+        return None, "Not enough historical data to predict spending."
+
+    # Prepare data for the linear regression model
+    X = pd.to_datetime(monthly_spending.index.to_timestamp()).astype('int64').values.reshape(-1, 1)
+    y = monthly_spending.values
+
+    # Train the model
+    model = LinearRegression()
+    model.fit(X, y)
+
+    # Predict for the next month
+    last_month_timestamp = pd.to_datetime(monthly_spending.index[-1].to_timestamp()).value
+    next_month_timestamp = pd.to_datetime(monthly_spending.index[-1].to_timestamp() + pd.DateOffset(months=1)).value
+
+    predicted_spending = model.predict([[next_month_timestamp]])[0]
+
+    # Round the prediction to 2 decimal places
+    predicted_spending = round(predicted_spending, 2)
+
+    return predicted_spending, None
+
 @login_required
 def dashboard(request):
     if request.method == 'POST':
@@ -78,7 +117,7 @@ def dashboard(request):
     else:
         expense_form = ExpenseForm()
         income_form = IncomeForm()
-        goal_form = GoalForm() # Initialize GoalForm for GET requests
+        goal_form = GoalForm()
 
     expenses = Expense.objects.filter(owner=request.user)
     incomes = Income.objects.filter(owner=request.user)
@@ -109,6 +148,9 @@ def dashboard(request):
     expenses = expenses.order_by('-date')
     incomes = incomes.order_by('-date')
 
+    # NEW: Predict next month's spending
+    predicted_spending_amount, prediction_error = predict_monthly_spending(request.user)
+
     total_spent = expenses.aggregate(Sum('amount'))['amount__sum']
     total_income = incomes.aggregate(Sum('amount'))['amount__sum']
 
@@ -123,20 +165,7 @@ def dashboard(request):
     monthly_labels = [item['month'] for item in monthly_summary]
     monthly_data = [float(item['total']) for item in monthly_summary]
 
-    # Fetch goals for the current user
     goals = Goal.objects.filter(owner=request.user).order_by('due_date')
-
-    # Calendar logic
-    today_date = date.today()
-    start_of_week = today_date - timedelta(days=today_date.weekday())
-    week_days = []
-    for i in range(7):
-        day_date = start_of_week + timedelta(days=i)
-        week_days.append({
-            'name': day_date.strftime('%a'),
-            'date': day_date.day,
-            'is_today': (day_date == today_date)
-        })
 
     context = {
         'expense_form': expense_form,
@@ -156,8 +185,9 @@ def dashboard(request):
         'category_data': json.dumps(category_data),
         'monthly_labels': json.dumps(monthly_labels),
         'monthly_data': json.dumps(monthly_data),
-        'current_month_year': today_date.strftime('%B %Y'),
-        'week_days': week_days,
+        'current_month_year': today.strftime('%B %Y'),
+        'predicted_spending': predicted_spending_amount, # NEW
+        'prediction_error': prediction_error, # NEW
     }
     return render(request, 'expense/dashboard.html', context)
 
@@ -196,7 +226,7 @@ def delete_expense(request, expense_id):
 
 @login_required
 def edit_goal(request, goal_id):
-    goal = get_object_or_404(Goal, pk=goal_id) # Using pk for the primary key
+    goal = get_object_or_404(Goal, pk=goal_id)
     if goal.owner != request.user:
         messages.error(request, "You are not authorized to edit this goal.")
         return redirect('dashboard')
@@ -212,11 +242,11 @@ def edit_goal(request, goal_id):
         'form': form,
         'goal': goal,
     }
-    return render(request, 'expense/edit_goal.html', context) # Corrected template path
+    return render(request, 'expense/edit_goal.html', context)
 
 @login_required
 def delete_goal(request, goal_id):
-    goal = get_object_or_404(Goal, pk=goal_id) # Using pk for the primary key
+    goal = get_object_or_404(Goal, pk=goal_id)
     if goal.owner != request.user:
         messages.error(request, "You are not authorized to delete this goal.")
         return redirect('dashboard')
@@ -225,4 +255,4 @@ def delete_goal(request, goal_id):
         messages.success(request, 'Goal deleted successfully!')
         return redirect('dashboard')
     messages.info(request, "Confirm deletion?")
-    return render(request, 'expense/confirm_delete_goal.html', {'goal': goal}) # Corrected template path
+    return render(request, 'expense/confirm_delete_goal.html', {'goal': goal})

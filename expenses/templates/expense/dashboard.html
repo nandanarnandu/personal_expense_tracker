@@ -412,6 +412,23 @@ form button:hover {
     </div>
 </section>
 
+<section>
+    <h2>Predicted Spending & Budget</h2>
+    {% if prediction_error %}
+        <p style="color: #e74c3c; font-weight: bold;">Prediction Error: {{ prediction_error }}</p>
+        <p>Add more expenses over several months to enable spending predictions.</p>
+    {% else %}
+        <p>Your predicted spending for the next month is: <strong style="color: #0077cc;">₹{{ predicted_spending|floatformat:2 }}</strong></p>
+        <p>
+            {% if total_spent > predicted_spending %}
+                <span style="color: #e74c3c; font-weight: bold;">Warning:</span> You are currently over your predicted monthly spending.
+            {% else %}
+                <span style="color: #28a745; font-weight: bold;">On Track:</span> You are within your predicted monthly spending.
+            {% endif %}
+        </p>
+    {% endif %}
+</section>
+
 <section aria-labelledby="add-transactions-title">
     <h3 id="add-transactions-title">Add New Transactions</h3>
     <div class="form-section">
