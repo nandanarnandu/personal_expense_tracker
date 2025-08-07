@@ -9,9 +9,7 @@ from django.db.models import Q, Sum
 from datetime import datetime, date, timedelta
 from decimal import Decimal
 import json
-from .forms import GoalForm
 
-# Forms
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
@@ -35,7 +33,6 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         fields = UserCreationForm.Meta.fields + ('email',)
 
-# Views
 def home(request):
     return render(request, 'expense/home.html')
 
@@ -81,7 +78,7 @@ def dashboard(request):
     else:
         expense_form = ExpenseForm()
         income_form = IncomeForm()
-        goal_form = GoalForm()
+        goal_form = GoalForm() # Initialize GoalForm for GET requests
 
     expenses = Expense.objects.filter(owner=request.user)
     incomes = Income.objects.filter(owner=request.user)
@@ -112,23 +109,24 @@ def dashboard(request):
     expenses = expenses.order_by('-date')
     incomes = incomes.order_by('-date')
 
-    total_spent = expenses.aggregate(Sum('amount'))['amount__sum'] or Decimal(0)
-    total_income = incomes.aggregate(Sum('amount'))['amount__sum'] or Decimal(0)
+    total_spent = expenses.aggregate(Sum('amount'))['amount__sum']
+    total_income = incomes.aggregate(Sum('amount'))['amount__sum']
+
+    total_spent = total_spent if total_spent is not None else Decimal(0)
+    total_income = total_income if total_income is not None else Decimal(0)
     balance = total_income - total_spent
 
     category_summary = expenses.values('category').annotate(total=Sum('amount')).order_by('-total')
     category_labels = [item['category'] for item in category_summary]
     category_data = [float(item['total']) for item in category_summary]
-
-    monthly_summary = expenses.extra(
-        select={'month': "strftime('%%Y-%%m', date)"}
-    ).values('month').annotate(total=Sum('amount')).order_by('month')
-
+    monthly_summary = expenses.extra(select={'month': "strftime('%%Y-%%m', date)"}).values('month').annotate(total=Sum('amount')).order_by('month')
     monthly_labels = [item['month'] for item in monthly_summary]
     monthly_data = [float(item['total']) for item in monthly_summary]
 
+    # Fetch goals for the current user
     goals = Goal.objects.filter(owner=request.user).order_by('due_date')
 
+    # Calendar logic
     today_date = date.today()
     start_of_week = today_date - timedelta(days=today_date.weekday())
     week_days = []
@@ -161,7 +159,6 @@ def dashboard(request):
         'current_month_year': today_date.strftime('%B %Y'),
         'week_days': week_days,
     }
-
     return render(request, 'expense/dashboard.html', context)
 
 @login_required
@@ -178,7 +175,6 @@ def edit_expense(request, expense_id):
             return redirect('dashboard')
     else:
         form = ExpenseForm(instance=expense)
-
     context = {
         'form': form,
         'expense': expense,
@@ -195,31 +191,38 @@ def delete_expense(request, expense_id):
         expense.delete()
         messages.success(request, 'Expense deleted successfully!')
         return redirect('dashboard')
-
     messages.info(request, "Confirm deletion?")
     return render(request, 'expense/confirm_delete.html', {'expense': expense})
 
 @login_required
 def edit_goal(request, goal_id):
-    goal = get_object_or_404(Goal, id=goal_id, owner=request.user)
-
+    goal = get_object_or_404(Goal, pk=goal_id) # Using pk for the primary key
+    if goal.owner != request.user:
+        messages.error(request, "You are not authorized to edit this goal.")
+        return redirect('dashboard')
     if request.method == 'POST':
         form = GoalForm(request.POST, instance=goal)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Goal updated successfully!')
             return redirect('dashboard')
     else:
         form = GoalForm(instance=goal)
-
-    return render(request, 'edit_goal.html', {'form': form, 'goal': goal})
+    context = {
+        'form': form,
+        'goal': goal,
+    }
+    return render(request, 'expense/edit_goal.html', context) # Corrected template path
 
 @login_required
 def delete_goal(request, goal_id):
-    goal = get_object_or_404(Goal, id=goal_id, owner=request.user)
-
+    goal = get_object_or_404(Goal, pk=goal_id) # Using pk for the primary key
+    if goal.owner != request.user:
+        messages.error(request, "You are not authorized to delete this goal.")
+        return redirect('dashboard')
     if request.method == 'POST':
         goal.delete()
-        messages.success(request, "Goal deleted successfully.")
+        messages.success(request, 'Goal deleted successfully!')
         return redirect('dashboard')
-
-    return render(request, 'confirm_delete_goal.html', {'goal': goal})
+    messages.info(request, "Confirm deletion?")
+    return render(request, 'expense/confirm_delete_goal.html', {'goal': goal}) # Corrected template path

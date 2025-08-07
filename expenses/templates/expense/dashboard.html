@@ -465,31 +465,29 @@ form button:hover {
     </div>
 
     <ul class="goals-list">
-        {% for goal in goals %}
-            <li tabindex="0" class="{% if goal.completed %}completed{% endif %}">
-                <div class="goal-header">
-                    <span class="goal-name">{{ goal.name }}</span>
-                    <span class="goal-amounts">
-                        ₹{{ goal.current_amount|floatformat:2 }} / ₹{{ goal.target_amount|floatformat:2 }}
-                        {% if goal.due_date %}(by {{ goal.due_date }}){% endif %}
-                    </span>
+    {% for goal in goals %}
+        <li tabindex="0" class="{% if goal.completed %}completed{% endif %}">
+            <div class="goal-header">
+                <span class="goal-name">{{ goal.name }}</span>
+                <span class="goal-amounts">
+                    ₹{{ goal.current_amount|floatformat:2 }} / ₹{{ goal.target_amount|floatformat:2 }}
+                    {% if goal.due_date %}(by {{ goal.due_date }}){% endif %}
+                </span>
+            </div>
+            <div class="goal-progress-bar">
+                <div class="goal-progress" style="width: {{ goal.progress_percentage|floatformat:0 }}%;">
+                    {{ goal.progress_percentage|floatformat:0 }}%
                 </div>
-                <div class="goal-progress-bar">
-                    <div class="goal-progress" style="width: {{ goal.progress_percentage|floatformat:0 }}%;">
-                        {{ goal.progress_percentage|floatformat:0 }}%
-                    </div>
-                </div>
-                <div class="goal-actions">
-                    {% if goal.id %}
-                        <a href="{% url 'edit_goal' goal.id %}">Edit Goal</a>
-                        <a href="{% url 'delete_goal' goal.id %}">Delete Goal</a>
-                    {% endif %}
-                </div>
-            </li>
-        {% empty %}
-            <li style="text-align: center; color: #667788;">No goals set yet. Start saving!</li>
-        {% endfor %}
-    </ul>
+            </div>
+            <div class="goal-actions">
+                <a href="{% url 'edit_goal' goal.id %}">Edit Goal</a>
+                <a href="{% url 'delete_goal' goal.id %}">Delete Goal</a>
+            </div>
+        </li>
+    {% empty %}
+        <li style="text-align: center; color: #667788;">No goals set yet. Start saving!</li>
+    {% endfor %}
+</ul>
 </section>
 
 
