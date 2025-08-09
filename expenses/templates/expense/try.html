@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard - Expense Tracker</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Public+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        /* Custom styles for charts and specific components */
+        .chart-wrapper {
+            background-color: #111722;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #324567;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-wrapper canvas {
+            max-height: 400px !important;
+            height: 300px !important;
+        }
+
+        .week-calendar {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            background: #192233;
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 1px solid #324567;
+            margin-bottom: 32px;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .week-calendar .day {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .week-calendar .day-name {
+            display: block;
+            font-weight: 600;
+            color: #92a5c9;
+            font-size: 1rem;
+        }
+
+        .week-calendar .day-date {
+            display: block;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .week-calendar .today {
+            background-color: #125be2;
+            color: #ffffff;
+        }
+
+        .week-calendar .today .day-name,
+        .week-calendar .today .day-date {
+            color: #ffffff;
+        }
+
+        .goal-progress-bar {
+            background-color: #233048;
+            border-radius: 4px;
+            height: 20px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .goal-progress {
+            background-color: #125be2;
+            height: 100%;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            line-height: 20px;
+        }
+
+        .completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 860px) {
+            .px-40 {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .week-calendar {
+                flex-direction: column;
+            }
+
+            .week-calendar .day {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head><body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#111722] dark group/design-root overflow-x-hidden" style='font-family: "Public Sans", "Noto Sans", sans-serif;'>
+        <div class="layout-container flex h-full grow flex-col">
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#233048] px-10 py-3">
+                <div class="flex items-center gap-4 text-white">
+                    <div class="size-4">
+                        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M36.7273 44C33.9891 44 31.6043 39.8386 30.3636 33.69C29.123 39.8386 26.7382 44 24 44C21.2618 44 18.877 39.8386 17.6364 33.69C16.3957 39.8386 14.0109 44 11.2727 44C7.25611 44 4 35.0457 4 24C4 12.9543 7.25611 4 11.2727 4C14.0109 4 16.3957 8.16144 17.6364 14.31C18.877 8.16144 21.2618 4 24 4C26.7382 4 29.123 8.16144 30.3636 14.31C31.6043 8.16144 33.9891 4 36.7273 4C40.7439 4 44 12.9543 44 24C44 35.0457 40.7439 44 36.7273 44Z"
+                                fill="currentColor"
+                            ></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Finance Tracker</h2>
+                </div>
+                <div class="flex flex-1 justify-end gap-8">
+                    <div class="flex items-center gap-9">
+                        <a class="text-white text-sm font-medium leading-normal" href="#">Dashboard</a>
+                        <a class="text-white text-sm font-medium leading-normal" href="#">Transactions</a>
+                        <a class="text-white text-sm font-medium leading-normal" href="#">Reports</a>
+                        <a class="text-white text-sm font-medium leading-normal" href="#">Settings</a>
+                    </div>
+                    <button class="text-white text-sm font-medium leading-normal hover:text-[#92a5c9]" onclick="logout()">Logout</button>
+                </div>
+            </header>
+            
+            <div class="px-40 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <div class="flex flex-wrap justify-between gap-3 p-4">
+                        <p class="text-white tracking-light text-[32px] font-bold leading-tight min-w-72">Welcome back, John!</p>
+                    </div>
+
+                    <!-- Week Calendar -->
+                    <div class="week-calendar" id="weekCalendar"></div>
+
+                    <!-- Today's Transactions -->
+                    <section aria-labelledby="today-transactions-title" class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Today's Transactions</h2>
+                        <div class="flex overflow-hidden rounded-lg border border-[#324567] bg-[#111722]">
+                            <div class="flex-1 p-4" id="todayTransactions">
+                                <!-- Today's transactions will be dynamically populated -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Monthly Summary -->
+                    <section aria-labelledby="monthly-summary-title" class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Monthly Summary</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-[#192233] border border-[#324567] rounded-lg p-4">
+                                <h4 class="text-white text-base font-medium leading-normal pb-2">Income (Monthly)</h4>
+                                <p class="text-[#2ecc71] text-2xl font-bold" id="monthlyIncome">₹0.00</p>
+                            </div>
+                            <div class="bg-[#192233] border border-[#324567] rounded-lg p-4">
+                                <h4 class="text-white text-base font-medium leading-normal pb-2">Expense (Monthly)</h4>
+                                <p class="text-[#e74c3c] text-2xl font-bold" id="monthlyExpense">₹0.00</p>
+                            </div>
+                            <div class="bg-[#192233] border border-[#324567] rounded-lg p-4">
+                                <h4 class="text-white text-base font-medium leading-normal pb-2">Balance (Monthly)</h4>
+                                <p class="text-white text-2xl font-bold" id="monthlyBalance">₹0.00</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Predicted Spending & Budget -->
+                    <section class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Predicted Spending & Budget</h2>
+                        <div class="bg-[#192233] border border-[#324567] rounded-lg p-4" id="predictionSection">
+                            <!-- Prediction content will be populated -->
+                        </div>
+                    </section>
+
+                    <!-- Add New Transactions -->
+                    <section aria-labelledby="add-transactions-title" class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Add New Transactions</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Add Expense -->
+                            <div class="bg-[#192233] border border-[#324567] rounded-lg p-6">
+                                <h4 class="text-white text-base font-medium leading-normal pb-4">Add Expense</h4>
+                                <form id="expenseForm" novalidate>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Title</label>
+                                        <input type="text" name="title" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" placeholder="Enter expense title" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Amount</label>
+                                        <input type="number" name="amount" required step="0.01" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" placeholder="Enter amount" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Category</label>
+                                        <select name="category" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal">
+                                            <option value="food">Food</option>
+                                            <option value="transport">Transport</option>
+                                            <option value="entertainment">Entertainment</option>
+                                            <option value="utilities">Utilities</option>
+                                            <option value="healthcare">Healthcare</option>
+                                            <option value="shopping">Shopping</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Date</label>
+                                        <input type="date" name="date" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" />
+                                    </div>
+                                    <button type="submit" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#125be2] text-white text-sm font-bold leading-normal tracking-[0.015em]" aria-label="Add new expense">
+                                        <span class="truncate">Add Expense</span>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Add Income -->
+                            <div class="bg-[#192233] border border-[#324567] rounded-lg p-6">
+                                <h4 class="text-white text-base font-medium leading-normal pb-4">Add Income</h4>
+                                <form id="incomeForm" novalidate>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Title</label>
+                                        <input type="text" name="title" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" placeholder="Enter income title" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Amount</label>
+                                        <input type="number" name="amount" required step="0.01" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" placeholder="Enter amount" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Category</label>
+                                        <select name="category" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal">
+                                            <option value="salary">Salary</option>
+                                            <option value="freelance">Freelance</option>
+                                            <option value="investment">Investment</option>
+                                            <option value="business">Business</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="text-white text-base font-medium leading-normal pb-2 block">Date</label>
+                                        <input type="date" name="date" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" />
+                                    </div>
+                                    <button type="submit" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#125be2] text-white text-sm font-bold leading-normal tracking-[0.015em]" aria-label="Add new income">
+                                        <span class="truncate">Add Income</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Goals Section -->
+                    <section aria-labelledby="goals-title" class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Your Goals</h2>
+                        
+                        <!-- Add New Goal -->
+                        <div class="bg-[#192233] border border-[#324567] rounded-lg p-6 mb-6">
+                            <h4 class="text-white text-base font-medium leading-normal pb-4">Add New Goal</h4>
+                            <form id="goalForm" novalidate>
+                                <div class="mb-4">
+                                    <label class="text-white text-base font-medium leading-normal pb-2 block">Goal Name</label>
+                                    <input type="text" name="name" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" placeholder="Enter goal name" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="text-white text-base font-medium leading-normal pb-2 block">Target Amount</label>
+                                    <input type="number" name="target_amount" required step="0.01" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" placeholder="Enter target amount" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="text-white text-base font-medium leading-normal pb-2 block">Current Amount</label>
+                                    <input type="number" name="current_amount" step="0.01" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" placeholder="Enter current amount" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="text-white text-base font-medium leading-normal pb-2 block">Due Date (Optional)</label>
+                                    <input type="date" name="due_date" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" />
+                                </div>
+                                <button type="submit" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#125be2] text-white text-sm font-bold leading-normal tracking-[0.015em]" aria-label="Add new goal">
+                                    <span class="truncate">Add Goal</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Goals List -->
+                        <div class="space-y-4" id="goalsList">
+                            <!-- Goals will be dynamically populated -->
+                        </div>
+                    </section>
+
+                    <!-- Filter Expenses -->
+                    <section aria-labelledby="filter-expenses-title" class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Filter Expenses by Date</h2>
+                        <div class="bg-[#192233] border border-[#324567] rounded-lg p-4">
+                            <form id="filterForm" novalidate class="flex flex-wrap gap-4 items-end">
+                                <div class="flex-1 min-w-40">
+                                    <label class="text-white text-base font-medium leading-normal pb-2 block" for="start_date">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" />
+                                </div>
+                                <div class="flex-1 min-w-40">
+                                    <label class="text-white text-base font-medium leading-normal pb-2 block" for="end_date">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#233048] focus:border-none h-14 placeholder:text-[#92a5c9] p-4 text-base font-normal leading-normal" />
+                                </div>
+                                <div class="flex gap-2">
+                                    <button type="submit" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#125be2] text-white text-sm font-bold leading-normal tracking-[0.015em]" aria-label="Apply date filter">
+                                        <span class="truncate">Apply Filter</span>
+                                    </button>
+                                    <button type="button" onclick="clearFilter()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#233048] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#324567]" aria-label="Clear date filter">
+                                        <span class="truncate">Clear Filter</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Spending Summary -->
+                    <section aria-labelledby="spending-summary-title" class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Spending Summary (Filtered)</h2>
+                        <div class="bg-[#192233] border border-[#324567] rounded-lg p-4">
+                            <p class="text-white">Total Spent (in current filter): <strong class="text-[#125be2]" id="filteredTotal">₹0.00</strong></p>
+                        </div>
+                    </section>
+
+                    <!-- Charts -->
+                    <section aria-labelledby="category-chart-title" class="px-4 py-3">
+                        <div class="chart-wrapper">
+                            <h4 class="text-white text-[18px] font-bold leading-tight tracking-[-0.015em] pb-3" id="category-chart-title">Spending by Category</h4>
+                            <canvas id="categoryChart" width="400" height="200"></canvas>
+                        </div>
+                    </section>
+
+                    <section aria-labelledby="monthly-chart-title" class="px-4 py-3">
+                        <div class="chart-wrapper">
+                            <h4 class="text-white text-[18px] font-bold leading-tight tracking-[-0.015em] pb-3" id="monthly-chart-title">Monthly Spending Trend</h4>
+                            <canvas id="monthlyChart" width="400" height="200"></canvas>
+                        </div>
+                    </section>
+
+                    <!-- All Expenses List -->
+                    <section aria-labelledby="expenses-list-title" class="px-4 py-3">
+                        <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Your All Expenses</h2>
+                        <div class="flex overflow-hidden rounded-lg border border-[#324567] bg-[#111722]">
+                            <div class="flex-1">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="bg-[#192233]">
+                                            <th class="px-4 py-3 text-left text-white text-sm font-medium leading-normal">Expense Details</th>
+                                            <th class="px-4 py-3 text-left text-white text-sm font-medium leading-normal">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="expensesTableBody">
+                                        <!-- Expenses will be dynamically populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo data storage (in a real app, this would be connected to a backend)
+        let expenses = [
+            {id: 1, title: "Lunch", amount: 250, category: "food", date: "2025-08-08"},
+            {id: 2, title: "Bus fare", amount: 50, category: "transport", date: "2025-08-07"},
+            {id: 3, title: "Movie ticket", amount: 300, category: "entertainment", date: "2025-08-06"}
+        ];
+
+        let incomes = [
+            {id: 1, title: "Salary", amount: 50000, category: "salary", date: "2025-08-01"},
+            {id: 2, title: "Freelance", amount: 15000, category: "freelance", date: "2025-08-05"}
+        ];
+
+        let goals = [
+            {id: 1, name: "Emergency Fund", target_amount: 100000, current_amount: 25000, due_date: "2025-12-31", completed: false},
+            {id: 2, name: "Vacation", target_amount: 50000, current_amount: 30000, due_date: "2025-10-15", completed: false}
+        ];
+
+        let currentFilter = {start_date: null, end_date: null};
+
+        // Live calendar generation
+        const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const calendarContainer = document.getElementById('weekCalendar');
+        const today = new Date();
+        const todayIndex = today.getDay();
+
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - todayIndex);
+
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(startOfWeek);
+            date.setDate(startOfWeek.getDate() + i);
+            const dayName = weekDays[date.getDay()];
+            const dayDate = date.getDate();
+
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'day' + (i === todayIndex ? ' today' : '');
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'day-name';
+            nameSpan.textContent = dayName;
+
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'day-date';
+            dateSpan.textContent = dayDate;
+
+            dayDiv.appendChild(nameSpan);
+            dayDiv.appendChild(dateSpan);
+
+            calendarContainer.appendChild(dayDiv);
+        }
+
+        // Initialize charts
+        let categoryChart, monthlyChart;
+
+        // Helper functions
+        function formatCurrency(amount) {
+            return `₹${parseFloat(amount).toFixed(2)}`;
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-IN');
+        }
+
+        function isDateInRange(date, startDate, endDate) {
+            const d = new Date(date);
+            const start = startDate ? new Date(startDate) : null;
+            const end = endDate ? new Date(endDate) : null;
+            
+            if (start && d < start) return false;
+            if (end && d > end) return false;
+            return true;
+        }
+
+        function getFilteredExpenses() {
+            return expenses.filter(expense => 
+                isDateInRange(expense.date, currentFilter.start_date, currentFilter.end_date)
+            );
+        }
+
+        function getFilteredIncomes() {
+            return incomes.filter(income => 
+                isDateInRange(income.date, currentFilter.start_date, currentFilter.end_date)
+            );
+        }
+
+        // Update today's transactions
+        function updateTodayTransactions() {
+            const todayStr = today.toISOString().split('T')[0];
+            const todayExpenses = expenses.filter(e => e.date === todayStr);
+            const todayIncomes = incomes.filter(i => i.date === todayStr);
+            
+            const container = document.getElementById('todayTransactions');
+            
+            if (todayExpenses.length === 0 && todayIncomes.length === 0) {
+                container.innerHTML = '<div class="text-[#92a5c9] text-sm text-center py-4">No transactions found for today.</div>';
+                return;
+            }
+
+            let html = '';
+            
+            todayIncomes.forEach(income => {
+                html += `
+                    <div class="border-b border-[#324567] pb-3 mb-3 last:border-b-0 last:mb-0" tabindex="0">
+                        <div class="text-white text-sm font-normal leading-normal">
+                            <strong>${income.title}</strong> – ${formatCurrency(income.amount)} (${income.category})
+                        </div>
+                        <div class="text-[#92a5c9] text-xs">Income</div>
+                    </div>
+                `;
+            });
+            
+            todayExpenses.forEach(expense => {
+                html += `
+                    <div class="border-b border-[#324567] pb-3 mb-3 last:border-b-0 last:mb-0" tabindex="0">
+                        <div class="text-white text-sm font-normal leading-normal">
+                            <strong>${expense.title}</strong> – ${formatCurrency(expense.amount)} (${expense.category})
+                        </div>
+                        <div class="text-[#92a5c9] text-xs">Expense</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Update monthly summary
+        function updateMonthlySummary() {
+            const filteredExpenses = getFilteredExpenses();
+            const filteredIncomes = getFilteredIncomes();
+            
+            const totalIncome = filteredIncomes.reduce((sum, income) => sum + parseFloat(income.amount), 0);
+            const totalExpense = filteredExpenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+            const balance = totalIncome - totalExpense;
+            
+            document.getElementById('monthlyIncome').textContent = formatCurrency(totalIncome);
+            document.getElementById('monthlyExpense').textContent = formatCurrency(totalExpense);
+            document.getElementById('monthlyBalance').textContent = formatCurrency(balance);
+            document.getElementById('filteredTotal').textContent = formatCurrency(totalExpense);
+        }
+
+        // Update prediction section
+        function updatePredictionSection() {
+            const container = document.getElementById('predictionSection');
+            
+            if (expenses.length < 3) {
+                container.innerHTML = `
+                    <p class="text-[#e74c3c] font-bold mb-2">Prediction Error: Insufficient data</p>
+                    <p class="text-[#92a5c9]">Add more expenses over several months to enable spending predictions.</p>
+                `;
+                return;
+            }
+            
+            // Simple prediction based on average monthly spending
+            const totalExpenses = expenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+            const avgMonthlySpending = totalExpenses / 3; // Assume 3 months of data
+            const currentMonthSpending = getFilteredExpenses().reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+            
+            const status = currentMonthSpending > avgMonthlySpending ? 
+                '<span class="text-[#e74c3c] font-bold">Warning:</span> You are currently over your predicted monthly spending.' :
+                '<span class="text-[#2ecc71] font-bold">On Track:</span> You are within your predicted monthly spending.';
+            
+            container.innerHTML = `
+                <p class="text-white mb-2">Your predicted spending for the next month is: <strong class="text-[#125be2]">${formatCurrency(avgMonthlySpending)}</strong></p>
+                <p class="text-[#92a5c9]">${status}</p>
+            `;
+        }
+
+        // Update goals list
+        function updateGoalsList() {
+            const container = document.getElementById('goalsList');
+            
+            if (goals.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-[#192233] border border-[#324567] rounded-lg p-4 text-center">
+                        <p class="text-[#92a5c9] text-sm">No goals set yet. Start saving!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            goals.forEach(goal => {
+                const progressPercentage = Math.min((goal.current_amount / goal.target_amount) * 100, 100);
+                const isCompleted = progressPercentage >= 100;
+                
+                html += `
+                    <div class="bg-[#192233] border border-[#324567] rounded-lg p-4 ${isCompleted ? 'completed' : ''}" tabindex="0">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-white text-base font-medium">${goal.name}</span>
+                            <span class="text-[#92a5c9] text-sm">
+                                ${formatCurrency(goal.current_amount)} / ${formatCurrency(goal.target_amount)}
+                                ${goal.due_date ? `(by ${formatDate(goal.due_date)})` : ''}
+                            </span>
+                        </div>
+                        <div class="goal-progress-bar">
+                            <div class="goal-progress" style="width: ${progressPercentage}%;">
+                                ${Math.round(progressPercentage)}%
+                            </div>
+                        </div>
+                        <div class="flex gap-4 mt-2">
+                            <button onclick="editGoal(${goal.id})" class="text-[#125be2] text-sm font-medium hover:underline">Edit Goal</button>
+                            <button onclick="deleteGoal(${goal.id})" class="text-[#e74c3c] text-sm font-medium hover:underline">Delete Goal</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Update expenses table
+        function updateExpensesTable() {
+            const tbody = document.getElementById('expensesTableBody');
+            const filteredExpenses = getFilteredExpenses();
+            
+            if (filteredExpenses.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="2" class="px-4 py-4 text-[#92a5c9] text-sm text-center">No expenses recorded yet.</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            filteredExpenses.forEach(expense => {
+                html += `
+                    <tr class="border-t border-t-[#324567]" tabindex="0">
+                        <td class="px-4 py-2 text-white text-sm font-normal leading-normal">
+                            <strong>${expense.title}</strong> – ${formatCurrency(expense.amount)} (${expense.category}) on ${formatDate(expense.date)}
+                        </td>
+                        <td class="px-4 py-2">
+                            <div class="flex gap-3">
+                                <button onclick="editExpense(${expense.id})" class="text-[#125be2] text-sm font-medium hover:underline">Edit</button>
+                                <button onclick="deleteExpense(${expense.id})" class="text-[#e74c3c] text-sm font-medium hover:underline">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+
+        // Update category chart
+        function updateCategoryChart() {
+            const filteredExpenses = getFilteredExpenses();
+            const categoryTotals = {};
+            
+            filteredExpenses.forEach(expense => {
+                const category = expense.category;
+                categoryTotals[category] = (categoryTotals[category] || 0) + parseFloat(expense.amount);
+            });
+            
+            const labels = Object.keys(categoryTotals);
+            const data = Object.values(categoryTotals);
+            const colors = [
+                '#125be2', '#e74c3c', '#2ecc71', '#f39c12',
+                '#9b59b6', '#1abc9c', '#34495e', '#e67e22'
+            ];
+            
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            
+            if (categoryChart) {
+                categoryChart.destroy();
+            }
+            
+            categoryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 2,
+                        borderColor: '#111722'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update monthly chart
+        function updateMonthlyChart() {
+            const monthlyData = {};
+            
+            expenses.forEach(expense => {
+                const month = expense.date.substring(0, 7); // YYYY-MM
+                monthlyData[month] = (monthlyData[month] || 0) + parseFloat(expense.amount);
+            });
+            
+            const labels = Object.keys(monthlyData).sort();
+            const data = labels.map(month => monthlyData[month]);
+            
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            
+            if (monthlyChart) {
+                monthlyChart.destroy();
+            }
+            
+            monthlyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Monthly Spending',
+                        data: data,
+                        borderColor: '#125be2',
+                        backgroundColor: 'rgba(18, 91, 226, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#92a5c9'
+                            },
+                            grid: {
+                                color: '#324567'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#92a5c9',
+                                callback: function(value) {
+                                    return '₹' + value;
+                                }
+                            },
+                            grid: {
+                                color: '#324567'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Form handlers
+        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newExpense = {
+                id: Date.now(),
+                title: formData.get('title'),
+                amount: parseFloat(formData.get('amount')),
+                category: formData.get('category'),
+                date: formData.get('date')
+            };
+            
+            expenses.push(newExpense);
+            this.reset();
+            updateAll();
+            alert('Expense added successfully!');
+        });
+
+        document.getElementById('incomeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newIncome = {
+                id: Date.now(),
+                title: formData.get('title'),
+                amount: parseFloat(formData.get('amount')),
+                category: formData.get('category'),
+                date: formData.get('date')
+            };
+            
+            incomes.push(newIncome);
+            this.reset();
+            updateAll();
+            alert('Income added successfully!');
+        });
+
+        document.getElementById('goalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newGoal = {
+                id: Date.now(),
+                name: formData.get('name'),
+                target_amount: parseFloat(formData.get('target_amount')),
+                current_amount: parseFloat(formData.get('current_amount') || 0),
+                due_date: formData.get('due_date') || null,
+                completed: false
+            };
+            
+            goals.push(newGoal);
+            this.reset();
+            updateGoalsList();
+            alert('Goal added successfully!');
+        });
+
+        document.getElementById('filterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            currentFilter.start_date = formData.get('start_date');
+            currentFilter.end_date = formData.get('end_date');
+            
+            updateAll();
+        });
+
+        // Action functions
+        function editExpense(id) {
+            const expense = expenses.find(e => e.id === id);
+            if (expense) {
+                const newTitle = prompt('Enter new title:', expense.title);
+                const newAmount = prompt('Enter new amount:', expense.amount);
+                
+                if (newTitle && newAmount) {
+                    expense.title = newTitle;
+                    expense.amount = parseFloat(newAmount);
+                    updateAll();
+                }
+            }
+        }
+
+        function deleteExpense(id) {
+            if (confirm('Are you sure you want to delete this expense?')) {
+                expenses = expenses.filter(e => e.id !== id);
+                updateAll();
+            }
+        }
+
+        function editGoal(id) {
+            const goal = goals.find(g => g.id === id);
+            if (goal) {
+                const newAmount = prompt('Enter current amount:', goal.current_amount);
+                if (newAmount !== null) {
+                    goal.current_amount = parseFloat(newAmount);
+                    updateGoalsList();
+                }
+            }
+        }
+
+        function deleteGoal(id) {
+            if (confirm('Are you sure you want to delete this goal?')) {
+                goals = goals.filter(g => g.id !== id);
+                updateGoalsList();
+            }
+        }
+
+        function clearFilter() {
+            currentFilter.start_date = null;
+            currentFilter.end_date = null;
+            document.getElementById('start_date').value = '';
+            document.getElementById('end_date').value = '';
+            updateAll();
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logout functionality would be implemented here');
+            }
+        }
+
+        // Update all sections
+        function updateAll() {
+            updateTodayTransactions();
+            updateMonthlySummary();
+            updatePredictionSection();
+            updateGoalsList();
+            updateExpensesTable();
+            updateCategoryChart();
+            updateMonthlyChart();
+        }
+
+        // Set today's date as default for forms
+        const todayStr = today.toISOString().split('T')[0];
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            if (input.name === 'date') {
+                input.value = todayStr;
+            }
+        });
+
+        // Initialize the dashboard
+        updateAll();
+    </script>
+</body>
+</html>
