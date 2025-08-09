@@ -5,36 +5,33 @@
     <meta charset="UTF-8">
     <title>Confirm Delete - Expense Tracker</title>
     <style>
-        /* Reset and base styles */
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #c7d9f9, #e6f0fa);
+            background-color: #111827; /* Dark background */
             margin: 0;
             padding: 40px 20px;
-            color: #1a2e4f;
+            color: #f9fafb;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .auth-container {
-            background: #ffffff;
+            background: #1f2937; /* Dark card */
             padding: 40px 50px;
             border-radius: 16px;
-            box-shadow: 0 12px 30px rgba(10, 61, 145, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
             max-width: 420px;
             width: 100%;
             text-align: center;
-            border: 1px solid #c5d3eb;
+            border: 1px solid #374151;
         }
         h2 {
             margin-top: 0;
             margin-bottom: 28px;
             font-weight: 800;
-            color: #0a1d40;
+            color: #f9fafb;
             font-size: 2.2rem;
             letter-spacing: 0.05em;
         }
@@ -42,10 +39,10 @@
             margin: 18px 0;
             font-size: 1rem;
             line-height: 1.4;
-            color: #2c3e70;
+            color: #fca5a5; /* Red warning text */
         }
         button[type="submit"] {
-            background-color: #e74c3c;
+            background-color: #dc2626; /* Red delete button */
             color: #ffffff;
             font-weight: 700;
             font-size: 1.1rem;
@@ -53,33 +50,45 @@
             border: none;
             border-radius: 28px;
             cursor: pointer;
-            box-shadow: 0 6px 21px rgba(231, 76, 60, 0.45);
+            box-shadow: 0 6px 21px rgba(220, 38, 38, 0.45);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        button[type="submit"]:hover,
+        button[type="submit"]:focus {
+            background-color: #b91c1c;
+            box-shadow: 0 7px 22px rgba(185, 28, 28, 0.55);
         }
         a.button-link {
             display: inline-block;
             margin-left: 20px;
             padding: 14px 28px;
             background-color: transparent;
-            border: 2px solid #2980b9;
-            color: #2980b9;
+            border: 2px solid #3b82f6; /* Blue outline */
+            color: #3b82f6;
             border-radius: 28px;
             font-weight: 700;
             font-size: 1.1rem;
             cursor: pointer;
             text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        a.button-link:hover,
+        a.button-link:focus {
+            background-color: #3b82f6;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
     <main class="auth-container" role="main" aria-label="Confirm Expense Deletion">
         <h2>Are you sure you want to delete "<span style="font-weight: bold;">{{ expense.title }}</span>"?</h2>
-        <p style="color: #e74c3c; margin-bottom: 20px;">This action cannot be undone.</p>
+        <p>This action cannot be undone.</p>
         <div style="text-align: center;">
             <form method="POST" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit">Yes, Delete It</button>
             </form>
-            <a href="{% url 'dashboard' %}" class="button-link" style="margin-left: 10px;">No, Go Back to Dashboard</a>
+            <a href="{% url 'dashboard' %}" class="button-link">No, Go Back to Dashboard</a>
         </div>
     </main>
 </body>

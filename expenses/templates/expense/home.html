@@ -3,103 +3,23 @@
 <head>
     <meta charset="UTF-8" />
     <title>Expense Tracker</title>
-    <style>
-        /* Reset and base styles */
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e6f0fa;
-            margin: 0;
-            padding: 0;
-            color: #1a2e4f;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background: #ffffff;
-            padding: 40px 50px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(26, 46, 79, 0.15);
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            border: 1px solid #c5d3eb;
-            box-sizing: border-box;
-        }
-        h1 {
-            margin-bottom: 28px;
-            font-weight: 700;
-            color: #0a1d40;
-            font-size: 2.5rem;
-            letter-spacing: 0.03em;
-        }
-        p {
-            margin: 20px 0;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #2c3e70;
-        }
-        p strong {
-            color: #102a57;
-        }
-        a {
-            display: inline-block;
-            margin: 14px 16px;
-            padding: 14px 34px;
-            text-decoration: none;
-            background-color: #0a3d91;
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            border: 1.5px solid transparent;
-            transition:
-                background-color 0.3s ease,
-                box-shadow 0.3s ease,
-                border-color 0.3s ease;
-            box-shadow: 0 5px 15px rgba(10, 61, 145, 0.35);
-            cursor: pointer;
-            user-select: none;
-        }
-        a:hover,
-        a:focus {
-            background-color: #072e72;
-            border-color: #061e4f;
-            box-shadow: 0 7px 22px rgba(6, 30, 79, 0.55);
-            outline: none;
-        }
-        .links {
-            margin-top: 32px;
-        }
-        /* Responsive */
-        @media (max-width: 480px) {
-            .container {
-                padding: 32px 25px;
-                max-width: 90vw;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            a {
-                margin: 12px 10px;
-                padding: 12px 28px;
-                font-size: 1rem;
-            }
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container" role="main" aria-label="Welcome to Expense Tracker">
-        <h1>Welcome to Expense Tracker!</h1>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-lg max-w-md w-full text-center border border-gray-700" role="main" aria-label="Welcome to Expense Tracker">
+        <h1 class="text-3xl font-bold mb-6">Welcome to Expense Tracker!</h1>
 
-        <p>Please register or log in to track your expenses.</p>
-        <div class="links" role="group" aria-label="Authentication links">
-            <a href="{% url 'register' %}" tabindex="0">Register</a>
-            <a href="{% url 'login' %}" tabindex="0">Login</a>
+        <p class="text-gray-300 text-lg mb-8">Please register or log in to track your expenses.</p>
+
+        <div class="flex flex-wrap justify-center gap-4 links" role="group" aria-label="Authentication links">
+            <a href="{% url 'register' %}" tabindex="0"
+               class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold shadow-md transition-colors duration-200">
+                Register
+            </a>
+            <a href="{% url 'login' %}" tabindex="0"
+               class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold shadow-md transition-colors duration-200">
+                Login
+            </a>
         </div>
     </div>
 </body>

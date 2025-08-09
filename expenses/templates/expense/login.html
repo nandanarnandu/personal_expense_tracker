@@ -10,30 +10,30 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e6f0fa;
+            background-color: #0f172a; /* Dark navy background */
             margin: 0;
             padding: 0;
-            color: #1a2e4f;
+            color: #f1f5f9; /* Light text */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
         .login-container {
-            background: #ffffff;
+            background: #1e293b; /* Darker card background */
             padding: 40px 50px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(26, 46, 79, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
             max-width: 400px;
             width: 100%;
             text-align: center;
-            border: 1px solid #c5d3eb;
+            border: 1px solid #334155;
             box-sizing: border-box;
         }
         h2 {
             margin-bottom: 28px;
             font-weight: 700;
-            color: #0a1d40;
+            color: #e2e8f0; /* Light heading */
             font-size: 2.2rem;
             letter-spacing: 0.03em;
         }
@@ -44,12 +44,12 @@
             margin: 18px 0;
             font-size: 1rem;
             line-height: 1.4;
-            color: #2c3e70;
+            color: #cbd5e1; /* Soft gray text */
         }
         label {
             display: block;
             margin-bottom: 6px;
-            color: #34495e;
+            color: #e2e8f0;
             font-weight: 600;
             font-size: 1rem;
         }
@@ -59,23 +59,30 @@
             width: 100%;
             padding: 10px 14px;
             font-size: 1rem;
-            border: 1.8px solid #c5d3eb;
+            background-color: #0f172a; /* Dark input background */
+            color: #f8fafc; /* Light text inside input */
+            border: 1.8px solid #334155;
             border-radius: 8px;
             margin-top: 4px;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
             box-sizing: border-box;
+        }
+        input[type="text"]::placeholder,
+        input[type="password"]::placeholder,
+        input[type="email"]::placeholder {
+            color: #94a3b8; /* Placeholder gray */
         }
         input[type="text"]:focus,
         input[type="password"]:focus,
         input[type="email"]:focus {
-            border-color: #0a3d91;
+            border-color: #6366f1; /* Indigo border on focus */
             outline: none;
-            box-shadow: 0 0 8px rgba(10, 61, 145, 0.5);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
         }
         button[type="submit"] {
             margin-top: 20px;
             width: 100%;
-            background-color: #0a3d91;
+            background-color: #6366f1; /* Indigo button */
             color: #ffffff;
             font-weight: 700;
             font-size: 1.1rem;
@@ -83,24 +90,35 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(10, 61, 145, 0.35);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.35);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
             user-select: none;
         }
         button[type="submit"]:hover,
         button[type="submit"]:focus {
-            background-color: #072e72;
-            box-shadow: 0 7px 22px rgba(6, 30, 79, 0.55);
+            background-color: #4f46e5;
+            box-shadow: 0 7px 22px rgba(79, 70, 229, 0.55);
             outline: none;
         }
 
-        /* Django default error styles (if any) */
+        /* Django default error styles */
         .errorlist {
-            color: #e74c3c;
+            color: #f87171; /* Softer red for errors */
             margin: 4px 0 12px;
             font-size: 0.9rem;
             list-style-type: none;
             padding-left: 0;
+        }
+
+        /* Forgot password link */
+        .forgot-link {
+            font-size: 0.95rem;
+            color: #a5b4fc;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .forgot-link:hover {
+            color: #c7d2fe;
         }
     </style>
 </head>
@@ -130,7 +148,9 @@
             {% endif %}
             <button type="submit" aria-label="Login to your account">Login</button>
         </form>
-        <p style="text-align: center; margin-top: 20px;"><a href="{% url 'password_reset' %}" style="font-size: 0.95rem;">Forgot your password?</a></p>
+        <p style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'password_reset' %}" class="forgot-link">Forgot your password?</a>
+        </p>
     </main>
 </body>
 </html>
