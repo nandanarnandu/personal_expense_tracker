@@ -60,14 +60,3 @@ The project is designed to be easily extensible. Potential future features inclu
 
 ---
 
-### 📊 GitHub Stats
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=nandanarnandu&theme=shadow_blue&hide_border=false&include_all_commits=true&count_private=true" /><br/>
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=nandanarnandu&theme=shadow_blue&hide_border=false&layout=compact" />
-</p>
-
-### 🌐 Socials
-<p align="center">
-  <a href="https://www.linkedin.com/in/nandanarofficial/"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-  <a href="mailto:nanduofficial111@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-</p>
