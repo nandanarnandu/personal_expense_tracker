@@ -56,10 +56,10 @@ python manage.py runserver
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Python, Django
-- **Database**: SQLite
-- **AI/ML**: Pandas, Scikit-learn
-- **Frontend**: HTML5, CSS3, JavaScript, Chart.js
+- Backend: Python, Django
+- Database: SQLite
+- AI/ML: Pandas, Scikit-learn
+- Frontend: HTML5, CSS3, JavaScript, Chart.js
 
 ## 🎨 Future Enhancements
 
