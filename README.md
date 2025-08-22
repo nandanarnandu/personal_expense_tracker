@@ -29,7 +29,6 @@ A comprehensive personal finance management web application built with **Django*
   - Dynamic charts (bar and pie) to visualize spending trends and category distribution.
   - Filter transactions by date range for detailed financial insights.
 - **🤖 AI-Powered Insights:**
-  - **Anomaly Detection:** An intelligent model identifies unusual transactions (potential errors or fraud), flagging them for review.
   - **Predictive Spending:** A machine learning model forecasts your next month's spending based on historical data, providing proactive budget warnings.
 - **🎨 Professional UI/UX:** A clean, responsive, and intuitive interface for a seamless user experience.
 
@@ -57,6 +56,7 @@ The project is designed to be easily extensible. Potential future features inclu
 - Adding a dedicated REST API for mobile clients.
 - Creating a more detailed "Monthly Budget" feature with category-specific limits.
 - Integrating a real email service like SendGrid for notifications.
+- Anomaly Detection: A machine learning model to identify unusual spending patterns for review.
 
 ---
 
