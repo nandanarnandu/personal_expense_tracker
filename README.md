@@ -1,62 +1,81 @@
-<div align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&duration=3000&pause=1000&center=true&vCenter=true&width=700&color=3366CC&lines=AI-Powered+Personal+Finance+Tracker" alt="Typing SVG" />
-</div>
+# 💰 AI-Powered Personal Finance Tracker
+
+[![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Django](https://img.shields.io/badge/django-v4.0+-green.svg)](https://www.djangoproject.com/)
+[![SQLite](https://img.shields.io/badge/database-SQLite-purple.svg)](https://www.sqlite.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> An intelligent web application to **track, manage, and analyze your finances** with **AI-powered insights**. Built with **Python, Django, Pandas, and Scikit-learn**.
 
 ---
 
-<div align="center">
-  <strong>An intelligent web app to manage your finances with AI insights</strong><br><br>
-  💡 Built with Python & Django &nbsp;&nbsp; | &nbsp;&nbsp; 🚀 Features Anomaly Detection & Predictive Spending
-</div>
+## ✨ Features
 
-<br>
-
-### 🚀 About the Project
-A comprehensive personal finance management web application built with **Django**. This app goes beyond basic tracking by providing **AI-powered insights** like anomaly detection and predictive spending. It helps users effortlessly track, manage, and visualize their spending habits to achieve their financial goals.
-
-<br>
-
----
-
-### ✨ Key Features
-
-- **🔐 User Authentication:** Secure and user-friendly registration, login, and logout.
-- **💰 Income & Expense Tracking:** Easily add, view, edit, and delete income and expense records.
-- **🎯 Goal Setting:** Set financial goals, track your progress in real-time with a dynamic progress bar, and visualize your savings journey.
-- **📊 Smart Analytics & Visualization:**
-  - An interactive calendar for a week's snapshot.
-  - Monthly summaries of your income, expenses, and balance.
-  - Dynamic charts (bar and pie) to visualize spending trends and category distribution.
-  - Filter transactions by date range for detailed financial insights.
-- **🤖 AI-Powered Insights:**
-  - **Predictive Spending:** A machine learning model forecasts your next month's spending based on historical data, providing proactive budget warnings.
-- **🎨 Professional UI/UX:** A clean, responsive, and intuitive interface for a seamless user experience.
-
-<br>
+- **🔐 User Authentication** - Secure login, registration, and logout
+- **💰 Income & Expense Tracking** - Add, edit, and delete transactions easily
+- **🎯 Goal Setting** - Track savings progress with dynamic progress bars
+- **📊 Smart Analytics & Visualization**
+  - Weekly calendar view
+  - Monthly income & expense summaries
+  - Interactive charts (bar & pie) for spending trends
+  - Date range filters for detailed insights
+- **🤖 AI Insights**
+  - Predictive Spending: Forecasts next month’s expenses using ML
+- **🎨 Professional UI/UX** - Clean, responsive, and intuitive interface
 
 ---
 
-### 💻 Technologies Used
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
-![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![Chart.js](https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white)
-![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
-![Scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
+## 🚀 Quick Start
+
+```bash
+# Clone and setup
+git clone https://github.com/nandanarnandu/Personal_Expense_Tracker.git
+cd finance-tracker
+
+python -m venv venv
+source venv/bin/activate   # or venv\Scripts\activate on Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run migrations
+python manage.py migrate
+
+# Start the server
+python manage.py runserver
+
+# Open http://127.0.0.1:8000
+
+## 📸 Usage
+
+1.Register or login to your account
+2.Add your income and expenses
+3.Set financial goals and track progress
+4.Explore AI-powered insights on spending predictions
+5.Visualize your finances with charts & summaries
+
+## 🛠️ Tech Stack
+
+- **Backend**: Python, Django
+- **Database**: SQLite
+- **AI/ML**: Pandas, Scikit-learn
+- **Frontend**: HTML5, CSS3, JavaScript, Chart.js
+
+## 🎨 Future Enhancements
+
+Export data as CSV or PDF
+Two-Factor Authentication (2FA)
+Dedicated REST API for mobile clients
+Monthly Budget with category-specific limits
+Real email notifications (e.g., SendGrid)
+Anomaly Detection model for unusual spending
+```
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create feature branch
+3. Make changes
+4. Submit pull request
 
 ---
-
-### 🚀 Future Enhancements
-The project is designed to be easily extensible. Potential future features include:
-- Exporting data as CSV or PDF.
-- Implementing Two-Factor Authentication (2FA) for enhanced security.
-- Adding a dedicated REST API for mobile clients.
-- Creating a more detailed "Monthly Budget" feature with category-specific limits.
-- Integrating a real email service like SendGrid for notifications.
-- Anomaly Detection: A machine learning model to identify unusual spending patterns for review.
-
----
-
