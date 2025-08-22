@@ -49,33 +49,36 @@ python manage.py runserver
 
 ## 📸 Usage
 
-1.Register or login to your account
-2.Add your income and expenses
-3.Set financial goals and track progress
-4.Explore AI-powered insights on spending predictions
-5.Visualize your finances with charts & summaries
+1. Register or login to your account  
+2. Add your income and expenses  
+3. Set financial goals and track progress  
+4. Explore AI-powered insights on spending predictions  
+5. Visualize your finances with charts & summaries  
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Python, Django
-- **Database**: SQLite
-- **AI/ML**: Pandas, Scikit-learn
-- **Frontend**: HTML5, CSS3, JavaScript, Chart.js
+- **Backend**: Python, Django  
+- **Database**: SQLite  
+- **AI/ML**: Pandas, Scikit-learn  
+- **Frontend**: HTML5, CSS3, JavaScript, Chart.js  
 
 ## 🎨 Future Enhancements
 
-Export data as CSV or PDF
-Two-Factor Authentication (2FA)
-Dedicated REST API for mobile clients
-Monthly Budget with category-specific limits
-Real email notifications (e.g., SendGrid)
-Anomaly Detection model for unusual spending
+- **Data Features**: Export data as CSV or PDF  
+- **Security**: Two-Factor Authentication (2FA)  
+- **API**: Dedicated REST API for mobile clients  
+- **Budgeting**: Monthly budget with category-specific limits  
+- **Notifications**: Real email service (e.g., SendGrid)  
+- **AI**: Anomaly Detection model for unusual spending  
 
 ## 🤝 Contributing
 
-1. Fork the repo
-2. Create feature branch
-3. Make changes
-4. Submit pull request
+1. Fork the repo  
+2. Create a feature branch  
+3. Make your changes  
+4. Submit a pull request  
+
+💡 Contributions, issues, and feature requests are welcome!
+
 
 ---
