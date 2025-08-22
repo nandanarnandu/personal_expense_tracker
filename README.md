@@ -45,6 +45,7 @@ python manage.py migrate
 python manage.py runserver
 
 # Open http://127.0.0.1:8000
+```
 
 ## 📸 Usage
 
@@ -56,10 +57,10 @@ python manage.py runserver
 
 ## 🛠️ Tech Stack
 
-- Backend: Python, Django
-- Database: SQLite
-- AI/ML: Pandas, Scikit-learn
-- Frontend: HTML5, CSS3, JavaScript, Chart.js
+- **Backend**: Python, Django
+- **Database**: SQLite
+- **AI/ML**: Pandas, Scikit-learn
+- **Frontend**: HTML5, CSS3, JavaScript, Chart.js
 
 ## 🎨 Future Enhancements
 
@@ -69,7 +70,6 @@ Dedicated REST API for mobile clients
 Monthly Budget with category-specific limits
 Real email notifications (e.g., SendGrid)
 Anomaly Detection model for unusual spending
-```
 
 ## 🤝 Contributing
 
