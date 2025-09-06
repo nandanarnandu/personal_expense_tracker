@@ -7,9 +7,9 @@
 
 > An intelligent web application to **track, manage, and analyze your finances** with **AI-powered insights**. Built with **Python, Django, Pandas, and Scikit-learn**.
 
-<img width="1845" height="892" alt="Screenshot 2025-09-07 000403" src="https://github.com/user-attachments/assets/d12a6e78-a7ed-4ed4-b96d-0e46ef32cd53" />
-<img width="1875" height="908" alt="Screenshot 2025-09-07 000325" src="https://github.com/user-attachments/assets/730b1c20-68da-49c3-9373-9bad57cd0672" />
 <img width="1838" height="883" alt="Screenshot 2025-09-07 000130" src="https://github.com/user-attachments/assets/771e956a-c2c6-462b-9993-a022c4ba7b51" />
+<img width="1875" height="908" alt="Screenshot 2025-09-07 000325" src="https://github.com/user-attachments/assets/730b1c20-68da-49c3-9373-9bad57cd0672" />
+<img width="1845" height="892" alt="Screenshot 2025-09-07 000403" src="https://github.com/user-attachments/assets/d12a6e78-a7ed-4ed4-b96d-0e46ef32cd53" />
 
 ---
 
